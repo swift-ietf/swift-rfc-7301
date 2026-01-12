@@ -15,7 +15,7 @@
 //
 // RFC 7301 Section 3.1: The Application-Layer Protocol Negotiation Extension
 
-public import INCITS_4_1986
+public import ASCII
 
 extension RFC_7301 {
     /// Application Protocol Identifier
