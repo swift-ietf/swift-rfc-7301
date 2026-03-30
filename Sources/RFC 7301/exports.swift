@@ -14,4 +14,4 @@
 // swift-rfc-7301
 
 @_exported public import RFC_8446
-@_exported public import ASCII
+@_exported public import ASCII_Primitives
