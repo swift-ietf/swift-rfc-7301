@@ -18,37 +18,37 @@ struct RFC7301Tests {
 
     @Suite("Constants Tests")
     struct ConstantsTests {
-        @Test("Extension type is 16")
-        func extensionTypeIs16() {
+        @Test
+        func `Extension type is 16`() {
             #expect(RFC_7301.extensionType == 16)
         }
     }
 
     @Suite("Protocol Identifier Tests")
     struct ProtocolIdentifierTests {
-        @Test("Well-known protocols")
-        func wellKnownProtocols() {
+        @Test
+        func `Well-known protocols`() {
             #expect(RFC_7301.ProtocolIdentifier.http1_1.description == "http/1.1")
             #expect(RFC_7301.ProtocolIdentifier.h2.description == "h2")
             #expect(RFC_7301.ProtocolIdentifier.h3.description == "h3")
             #expect(RFC_7301.ProtocolIdentifier.h2c.description == "h2c")
         }
 
-        @Test("Create custom protocol")
-        func createCustomProtocol() throws {
+        @Test
+        func `Create custom protocol`() throws {
             let proto = try RFC_7301.ProtocolIdentifier("my-protocol")
             #expect(proto.description == "my-protocol")
         }
 
-        @Test("Reject empty protocol")
-        func rejectEmptyProtocol() {
+        @Test
+        func `Reject empty protocol`() {
             #expect(throws: RFC_7301.ProtocolIdentifier.Error.self) {
                 try RFC_7301.ProtocolIdentifier(rawValue: [])
             }
         }
 
-        @Test("Reject too long protocol")
-        func rejectTooLongProtocol() {
+        @Test
+        func `Reject too long protocol`() {
             let longBytes = Array(repeating: UInt8(0x61), count: 256)
 
             #expect(throws: RFC_7301.ProtocolIdentifier.Error.self) {
@@ -56,8 +56,8 @@ struct RFC7301Tests {
             }
         }
 
-        @Test("Serialize protocol identifier")
-        func serializeProtocolIdentifier() {
+        @Test
+        func `Serialize protocol identifier`() {
             let proto = RFC_7301.ProtocolIdentifier.h2
 
             var buffer: [UInt8] = []
@@ -73,39 +73,39 @@ struct RFC7301Tests {
 
     @Suite("Extension Tests")
     struct ExtensionTests {
-        @Test("Create extension with protocols")
-        func createExtensionWithProtocols() throws {
+        @Test
+        func `Create extension with protocols`() throws {
             let ext = try RFC_7301.Extension(protocols: [.h2, .http1_1])
 
             #expect(ext.protocols.count == 2)
             #expect(ext.selected == .h2)
         }
 
-        @Test("Reject empty protocol list")
-        func rejectEmptyProtocolList() {
+        @Test
+        func `Reject empty protocol list`() {
             #expect(throws: RFC_7301.Extension.Error.self) {
                 try RFC_7301.Extension(protocols: [])
             }
         }
 
-        @Test("Create server response")
-        func createServerResponse() {
+        @Test
+        func `Create server response`() {
             let ext = RFC_7301.Extension(selected: .h2)
 
             #expect(ext.protocols.count == 1)
             #expect(ext.selected == .h2)
         }
 
-        @Test("Convenience constructors")
-        func convenienceConstructors() {
+        @Test
+        func `Convenience constructors`() {
             #expect(RFC_7301.Extension.http2.protocols.contains(.h2))
             #expect(RFC_7301.Extension.http2.protocols.contains(.http1_1))
             #expect(RFC_7301.Extension.http3.protocols == [.h3])
             #expect(RFC_7301.Extension.http1_1.protocols == [.http1_1])
         }
 
-        @Test("Serialize extension")
-        func serializeExtension() throws {
+        @Test
+        func `Serialize extension`() throws {
             let ext = try RFC_7301.Extension(protocols: [.h2])
 
             var buffer: [UInt8] = []
@@ -132,8 +132,8 @@ struct RFC7301Tests {
             #expect(buffer[8] == 0x32) // '2'
         }
 
-        @Test("Serialize multiple protocols")
-        func serializeMultipleProtocols() throws {
+        @Test
+        func `Serialize multiple protocols`() throws {
             let ext = try RFC_7301.Extension(protocols: [.h2, .http1_1])
 
             var buffer: [UInt8] = []
@@ -146,22 +146,22 @@ struct RFC7301Tests {
 
     @Suite("Additional Protocols Tests")
     struct AdditionalProtocolsTests {
-        @Test("Transport protocols")
-        func transportProtocols() {
+        @Test
+        func `Transport protocols`() {
             #expect(RFC_7301.ProtocolIdentifier.imap.description == "imap")
             #expect(RFC_7301.ProtocolIdentifier.pop3.description == "pop3")
             #expect(RFC_7301.ProtocolIdentifier.ftp.description == "ftp")
         }
 
-        @Test("WebRTC protocols")
-        func webrtcProtocols() {
+        @Test
+        func `WebRTC protocols`() {
             #expect(RFC_7301.ProtocolIdentifier.webrtc.description == "webrtc")
             #expect(RFC_7301.ProtocolIdentifier.cWebrtc.description == "c-webrtc")
             #expect(RFC_7301.ProtocolIdentifier.stunTurn.description == "stun.turn")
         }
 
-        @Test("DNS protocols")
-        func dnsProtocols() {
+        @Test
+        func `DNS protocols`() {
             #expect(RFC_7301.ProtocolIdentifier.dot.description == "dot")
             #expect(RFC_7301.ProtocolIdentifier.doq.description == "doq")
         }
