@@ -1,0 +1,10 @@
+# .github/metadata.yaml
+# Triaged by AI-assisted bulk pass (2026-04-29).
+description: "Swift implementation of RFC 7301: Transport Layer Security (TLS) Application-Layer Protocol Negotiation Extension."
+topics:
+  - standards
+  - rfc
+  - rfc-7301
+  - tls
+  - security
+homepage: "https://swift-institute.org"
