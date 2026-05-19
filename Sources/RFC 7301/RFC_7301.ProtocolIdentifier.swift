@@ -37,11 +37,11 @@ extension RFC_7301 {
     /// - HTTP/3: "h3"
     /// - SPDY/3.1: "spdy/3.1"
     public struct ProtocolIdentifier: Sendable, Hashable {
-        /// The protocol identifier bytes
-        public let rawValue: [UInt8]
+        /// The protocol identifier bytes (opaque byte-domain — typically ASCII)
+        public let rawValue: [Byte]
 
         /// Creates a protocol identifier WITHOUT validation
-        init(__unchecked: Void, rawValue: [UInt8]) {
+        init(__unchecked: Void, rawValue: [Byte]) {
             self.rawValue = rawValue
         }
 
@@ -49,7 +49,7 @@ extension RFC_7301 {
         ///
         /// - Parameter rawValue: The protocol identifier bytes (1-255 bytes)
         /// - Throws: `Error` if validation fails
-        public init(rawValue: [UInt8]) throws(Error) {
+        public init(rawValue: [Byte]) throws(Error) {
             guard !rawValue.isEmpty else {
                 throw Error.empty
             }
@@ -59,12 +59,18 @@ extension RFC_7301 {
             self.init(__unchecked: (), rawValue: rawValue)
         }
 
+        /// Stdlib-interop forwarder: construction from `[UInt8]` rawValue.
+        @_disfavoredOverload
+        public init(rawValue: [UInt8]) throws(Error) {
+            try self.init(rawValue: [Byte](rawValue))
+        }
+
         /// Creates a protocol identifier from a string
         ///
         /// - Parameter string: The protocol identifier string
         /// - Throws: `Error` if validation fails
         public init(_ string: some StringProtocol) throws(Error) {
-            try self.init(rawValue: Array(string.utf8))
+            try self.init(rawValue: [Byte](Array(string.utf8)))
         }
     }
 }
@@ -78,8 +84,9 @@ extension RFC_7301.ProtocolIdentifier: Binary.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         _ proto: Self,
         into buffer: inout Buffer
-    ) where Buffer.Element == UInt8 {
-        buffer.append(UInt8(proto.rawValue.count))
+    ) where Buffer.Element == Byte {
+        // Length is opaque-byte length count (≤255 enforced at init).
+        buffer.append(Byte(UInt8(proto.rawValue.count)))
         buffer.append(contentsOf: proto.rawValue)
     }
 }
@@ -88,7 +95,9 @@ extension RFC_7301.ProtocolIdentifier: Binary.Serializable {
 
 extension RFC_7301.ProtocolIdentifier: CustomStringConvertible {
     public var description: String {
-        String(decoding: rawValue, as: UTF8.self)
+        // Stdlib idiom: String(decoding:as:UTF8.self) takes Sequence<UInt8>;
+        // bridge via .underlying for the byte-domain rawValue.
+        String(decoding: rawValue.underlying, as: UTF8.self)
     }
 }
 
@@ -99,7 +108,7 @@ extension RFC_7301.ProtocolIdentifier: Codable {
         let container = try decoder.singleValueContainer()
         let string = try container.decode(String.self)
         do {
-            try self.init(string)
+            try self.init(string as String)
         } catch {
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(

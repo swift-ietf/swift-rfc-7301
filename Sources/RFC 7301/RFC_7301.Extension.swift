@@ -99,27 +99,27 @@ extension RFC_7301.Extension: Binary.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         _ ext: Self,
         into buffer: inout Buffer
-    ) where Buffer.Element == UInt8 {
-        // Serialize protocol list
-        var protocolListData: [UInt8] = []
+    ) where Buffer.Element == Byte {
+        // Serialize protocol list to a typed [Byte] intermediate so the
+        // length can be measured.
+        var protocolListData: [Byte] = []
         for proto in ext.protocols {
             RFC_7301.ProtocolIdentifier.serialize(proto, into: &protocolListData)
         }
 
-        // Extension type (16)
-        buffer.append(0)
-        buffer.append(16)
+        // Extension type (16) — UInt16 wire form
+        let extensionType: UInt16 = 16
+        buffer.append(contentsOf: extensionType.bytes(endianness: .big))
 
-        // Extension data length (2 + protocol list length)
-        let extensionLength = 2 + protocolListData.count
-        buffer.append(UInt8(extensionLength >> 8))
-        buffer.append(UInt8(extensionLength & 0xFF))
+        // Extension data length (2 + protocol list length) — UInt16 wire form
+        let extensionLength = UInt16(2 + protocolListData.count)
+        buffer.append(contentsOf: extensionLength.bytes(endianness: .big))
 
-        // Protocol list length
-        buffer.append(UInt8(protocolListData.count >> 8))
-        buffer.append(UInt8(protocolListData.count & 0xFF))
+        // Protocol list length — UInt16 wire form
+        let listLength = UInt16(protocolListData.count)
+        buffer.append(contentsOf: listLength.bytes(endianness: .big))
 
-        // Protocol list
+        // Protocol list (already [Byte])
         buffer.append(contentsOf: protocolListData)
     }
 }

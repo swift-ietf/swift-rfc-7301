@@ -60,7 +60,7 @@ struct RFC7301Tests {
         func `Serialize protocol identifier`() {
             let proto = RFC_7301.ProtocolIdentifier.h2
 
-            var buffer: [UInt8] = []
+            var buffer: [Byte] = []
             RFC_7301.ProtocolIdentifier.serialize(proto, into: &buffer)
 
             // 1 byte length + 2 bytes "h2"
@@ -108,7 +108,7 @@ struct RFC7301Tests {
         func `Serialize extension`() throws {
             let ext = try RFC_7301.Extension(protocols: [.h2])
 
-            var buffer: [UInt8] = []
+            var buffer: [Byte] = []
             RFC_7301.Extension.serialize(ext, into: &buffer)
 
             // Extension type (2) + length (2) + list length (2) + protocol (1+2)
@@ -136,7 +136,7 @@ struct RFC7301Tests {
         func `Serialize multiple protocols`() throws {
             let ext = try RFC_7301.Extension(protocols: [.h2, .http1_1])
 
-            var buffer: [UInt8] = []
+            var buffer: [Byte] = []
             RFC_7301.Extension.serialize(ext, into: &buffer)
 
             // Extension type (2) + length (2) + list length (2) + h2 (3) + http/1.1 (9)
