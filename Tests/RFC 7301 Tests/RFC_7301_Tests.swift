@@ -49,7 +49,7 @@ struct RFC7301Tests {
 
         @Test
         func `Reject too long protocol`() {
-            let longBytes = Array(repeating: UInt8(0x61), count: 256)
+            let longBytes: [Byte] = Array(repeating: Byte(0x61), count: 256)
 
             #expect(throws: RFC_7301.ProtocolIdentifier.Error.self) {
                 try RFC_7301.ProtocolIdentifier(rawValue: longBytes)

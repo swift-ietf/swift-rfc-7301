@@ -59,11 +59,8 @@ extension RFC_7301 {
             self.init(__unchecked: (), rawValue: rawValue)
         }
 
-        /// Stdlib-interop forwarder: construction from `[UInt8]` rawValue.
-        @_disfavoredOverload
-        public init(rawValue: [UInt8]) throws(Error) {
-            try self.init(rawValue: [Byte](rawValue))
-        }
+        // Stdlib-interop forwarder `init(rawValue: [UInt8])` moved to
+        // `RFC 7301 Standard Library Integration` target per [API-BYTE-007].
 
         /// Creates a protocol identifier from a string
         ///

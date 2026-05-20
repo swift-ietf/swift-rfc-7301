@@ -11,6 +11,7 @@ extension Target.Dependency {
     static var rfc8446: Self { .product(name: "RFC 8446", package: "swift-rfc-8446") }
     static var standards: Self { .product(name: "Standard Library Extensions", package: "swift-standard-library-extensions") }
     static var incits41986: Self { .product(name: "ASCII Primitives", package: "swift-ascii-primitives") }
+    static var bytePrimitivesSLI: Self { .product(name: "Byte Primitives Standard Library Integration", package: "swift-byte-primitives") }
 }
 
 let package = Package(
@@ -23,12 +24,14 @@ let package = Package(
         .visionOS(.v26)
     ],
     products: [
-        .library(name: "RFC 7301", targets: ["RFC 7301"])
+        .library(name: "RFC 7301", targets: ["RFC 7301"]),
+        .library(name: "RFC 7301 Standard Library Integration", targets: ["RFC 7301 Standard Library Integration"]),
     ],
     dependencies: [
         .package(path: "../swift-rfc-8446"),
         .package(path: "../../swift-primitives/swift-standard-library-extensions"),
-        .package(path: "../../swift-primitives/swift-ascii-primitives")
+        .package(path: "../../swift-primitives/swift-ascii-primitives"),
+        .package(path: "../../swift-primitives/swift-byte-primitives")
     ],
     targets: [
         .target(
@@ -39,10 +42,24 @@ let package = Package(
                 .incits41986
             ]
         ),
+        .target(
+            name: "RFC 7301 Standard Library Integration",
+            dependencies: [
+                .rfc7301,
+                .bytePrimitivesSLI,
+            ]
+        ),
         .testTarget(
             name: "RFC 7301 Tests",
             dependencies: [
                 "RFC 7301",
+            ]
+        ),
+        .testTarget(
+            name: "RFC 7301 Standard Library Integration Tests",
+            dependencies: [
+                "RFC 7301",
+                "RFC 7301 Standard Library Integration",
             ]
         ),
     ],
