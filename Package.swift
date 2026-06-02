@@ -28,10 +28,10 @@ let package = Package(
         .library(name: "RFC 7301 Standard Library Integration", targets: ["RFC 7301 Standard Library Integration"]),
     ],
     dependencies: [
-        .package(path: "../swift-rfc-8446"),
-        .package(path: "../../swift-primitives/swift-standard-library-extensions"),
-        .package(path: "../../swift-primitives/swift-ascii-primitives"),
-        .package(path: "../../swift-primitives/swift-byte-primitives")
+        .package(url: "https://github.com/swift-ietf/swift-rfc-8446.git", branch: "main"),
+        .package(url: "https://github.com/swift-primitives/swift-standard-library-extensions.git", branch: "main"),
+        .package(url: "https://github.com/swift-primitives/swift-ascii-primitives.git", branch: "main"),
+        .package(url: "https://github.com/swift-primitives/swift-byte-primitives.git", branch: "main")
     ],
     targets: [
         .target(
