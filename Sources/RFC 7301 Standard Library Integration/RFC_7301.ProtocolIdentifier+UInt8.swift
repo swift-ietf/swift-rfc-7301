@@ -17,8 +17,8 @@
 // callers carrying `[UInt8]` (e.g. from network buffers, file reads) via
 // `[Byte](uint8s)`. Per [API-BYTE-007] (byte-discipline skill).
 
-public import RFC_7301
 internal import Byte_Primitives
+public import RFC_7301
 
 extension RFC_7301.ProtocolIdentifier {
     /// Stdlib-interop forwarder: construction from `[UInt8]` rawValue.

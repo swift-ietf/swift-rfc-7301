@@ -132,16 +132,21 @@ extension RFC_7301.Extension {
     /// This is the most common configuration for HTTPS.
     public static var http2: Self {
         // Cannot throw because we're using well-known protocols
+        // swiftlint:disable:next force_try
         try! Self(protocols: [.h2, .http1_1])
     }
 
     /// Creates an ALPN extension for HTTP/3
     public static var http3: Self {
+        // Cannot throw because we're using well-known protocols
+        // swiftlint:disable:next force_try
         try! Self(protocols: [.h3])
     }
 
     /// Creates an ALPN extension for HTTP/1.1 only
     public static var http1_1: Self {
+        // Cannot throw because we're using well-known protocols
+        // swiftlint:disable:next force_try
         try! Self(protocols: [.http1_1])
     }
 }

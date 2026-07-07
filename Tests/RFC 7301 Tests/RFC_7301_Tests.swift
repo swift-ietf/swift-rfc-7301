@@ -11,6 +11,7 @@
 // ===----------------------------------------------------------------------===//
 
 import Testing
+
 @testable import RFC_7301
 
 @Suite("RFC 7301 ALPN Tests")
@@ -65,9 +66,9 @@ struct RFC7301Tests {
 
             // 1 byte length + 2 bytes "h2"
             #expect(buffer.count == 3)
-            #expect(buffer[0] == 2) // length
-            #expect(buffer[1] == 0x68) // 'h'
-            #expect(buffer[2] == 0x32) // '2'
+            #expect(buffer[0] == 2)  // length
+            #expect(buffer[1] == 0x68)  // 'h'
+            #expect(buffer[2] == 0x32)  // '2'
         }
     }
 
@@ -128,8 +129,8 @@ struct RFC7301Tests {
 
             // Protocol: length + "h2"
             #expect(buffer[6] == 2)
-            #expect(buffer[7] == 0x68) // 'h'
-            #expect(buffer[8] == 0x32) // '2'
+            #expect(buffer[7] == 0x68)  // 'h'
+            #expect(buffer[8] == 0x32)  // '2'
         }
 
         @Test

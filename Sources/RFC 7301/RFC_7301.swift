@@ -23,6 +23,7 @@
 /// RFC 7301: TLS Application-Layer Protocol Negotiation Extension
 ///
 /// This namespace contains types for ALPN as defined in RFC 7301 from July 2014.
+///
 /// ALPN allows the client and server to negotiate which application protocol
 /// to use over a TLS connection.
 ///

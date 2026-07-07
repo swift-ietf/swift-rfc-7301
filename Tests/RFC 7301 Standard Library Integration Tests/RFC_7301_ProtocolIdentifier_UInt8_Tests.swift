@@ -10,9 +10,9 @@
 //
 // ===----------------------------------------------------------------------===//
 
-import Testing
 import RFC_7301
 import RFC_7301_Standard_Library_Integration
+import Testing
 
 @Suite("RFC 7301 ProtocolIdentifier UInt8 forwarder")
 struct RFC_7301_ProtocolIdentifier_UInt8_Tests {
