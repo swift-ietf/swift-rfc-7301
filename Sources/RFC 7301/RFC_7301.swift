@@ -29,8 +29,8 @@
 ///
 /// ## Key Types
 ///
-/// - ``Protocol``: Application protocol identifier
-/// - ``Extension``: ALPN TLS extension
+/// - ``ProtocolIdentifier``: Application protocol identifier
+/// - ``Extension``: ALPN extension payload (`extension_data` body)
 ///
 /// ## Usage
 ///
@@ -43,9 +43,8 @@
 /// // Create an ALPN extension with HTTP/2 and HTTP/1.1
 /// let alpn = try RFC_7301.Extension(protocols: [.h2, .http1_1])
 ///
-/// // Serialize for ClientHello
-/// var buffer: [UInt8] = []
-/// RFC_7301.Extension.serialize(alpn, into: &buffer)
+/// // Lift the payload into an enveloped extension for a ClientHello
+/// let ext = alpn.extensionData     // type == .alpn
 /// ```
 ///
 /// ## See Also
