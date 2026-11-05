@@ -15,8 +15,9 @@
 //
 // RFC 7301 Section 3.1: The Application-Layer Protocol Negotiation Extension
 
-public import ASCII_Primitives
-public import Binary_Serializable_Primitives
+public import ASCII
+public import Binary
+public import Byte
 
 extension RFC_7301 {
     /// Application Protocol Identifier
@@ -68,7 +69,7 @@ extension RFC_7301 {
         /// - Parameter string: The protocol identifier string
         /// - Throws: `Error` if validation fails
         public init(_ string: some StringProtocol) throws(Error) {
-            try self.init(rawValue: [Byte](Array(string.utf8)))
+            try self.init(rawValue: string.utf8.map(Byte.init(bitPattern:)))
         }
     }
 }
@@ -93,9 +94,7 @@ extension RFC_7301.ProtocolIdentifier: Binary.Serializable {
 
 extension RFC_7301.ProtocolIdentifier: CustomStringConvertible {
     public var description: String {
-        // Stdlib idiom: String(decoding:as:UTF8.self) takes Sequence<UInt8>;
-        // bridge via .underlying for the byte-domain rawValue.
-        String(decoding: rawValue.underlying, as: UTF8.self)
+        String(decoding: rawValue, as: UTF8.self)
     }
 }
 

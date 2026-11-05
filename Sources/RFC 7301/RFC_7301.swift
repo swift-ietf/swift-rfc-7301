@@ -44,7 +44,7 @@
 /// let alpn = try RFC_7301.Extension(protocols: [.h2, .http1_1])
 ///
 /// // Lift the payload into an enveloped extension for a ClientHello
-/// let ext = alpn.extensionData     // type == .alpn
+/// let ext = try alpn.extensionData     // type == .alpn
 /// ```
 ///
 /// ## See Also

@@ -11,7 +11,7 @@
 // ===----------------------------------------------------------------------===//
 
 import Testing
-import Binary_Serializable_Primitives
+import Binary
 import RFC_8446
 
 @testable import RFC_7301
@@ -68,9 +68,9 @@ struct RFC7301Tests {
 
             // 1 byte length + 2 bytes "h2"
             #expect(buffer.count == 3)
-            #expect(buffer[0] == 2)  // length
-            #expect(buffer[1] == 0x68)  // 'h'
-            #expect(buffer[2] == 0x32)  // '2'
+            #expect(buffer[0] == Byte(2))  // length
+            #expect(buffer[1] == Byte(0x68))  // 'h'
+            #expect(buffer[2] == Byte(0x32))  // '2'
         }
     }
 
@@ -118,13 +118,13 @@ struct RFC7301Tests {
             #expect(buffer.count == 5)
 
             // Protocol list length = 3
-            #expect(buffer[0] == 0)
-            #expect(buffer[1] == 3)
+            #expect(buffer[0] == Byte(0))
+            #expect(buffer[1] == Byte(3))
 
             // Protocol: length + "h2"
-            #expect(buffer[2] == 2)
-            #expect(buffer[3] == 0x68)  // 'h'
-            #expect(buffer[4] == 0x32)  // '2'
+            #expect(buffer[2] == Byte(2))
+            #expect(buffer[3] == Byte(0x68))  // 'h'
+            #expect(buffer[4] == Byte(0x32))  // '2'
         }
 
         @Test
@@ -143,19 +143,19 @@ struct RFC7301Tests {
             let ext = try RFC_7301.Extension(protocols: [.h2])
 
             var buffer: [Byte] = []
-            RFC_8446.Extension.Data.serialize(ext.extensionData, into: &buffer)
+            RFC_8446.Extension.Data.serialize(try ext.extensionData, into: &buffer)
 
             // Envelope: type (2) + length (2) + list length (2) + protocol (1+2).
             // These are the exact bytes RFC_7301.Extension.serialize emitted
             // BEFORE the body-level migration — continuity evidence.
-            #expect(buffer == [0, 16, 0, 5, 0, 3, 2, 0x68, 0x32])
+            #expect(buffer == [Byte(0), Byte(16), Byte(0), Byte(5), Byte(0), Byte(3), Byte(2), Byte(0x68), Byte(0x32)])
         }
 
         @Test
-        func `Extension type is alpn`() {
+        func `Extension type is alpn`() throws {
             #expect(RFC_7301.Extension.extensionType == .alpn)
             #expect(RFC_7301.Extension.extensionType.rawValue == RFC_7301.extensionType)
-            #expect(RFC_7301.Extension.http2.extensionData.type == .alpn)
+            #expect(try RFC_7301.Extension.http2.extensionData.type == .alpn)
         }
     }
 
@@ -163,7 +163,7 @@ struct RFC7301Tests {
     struct ExtensionParseTests {
         @Test
         func `Parse single-protocol body`() throws {
-            let body: [Byte] = [0, 3, 2, 0x68, 0x32]  // list len 3; "h2"
+            let body: [Byte] = [Byte(0), Byte(3), Byte(2), Byte(0x68), Byte(0x32)]  // list len 3; "h2"
 
             let ext = try RFC_7301.Extension(binary: body)
 
@@ -194,7 +194,7 @@ struct RFC7301Tests {
         func `Reject empty list body`() {
             // Valid vector16 of length 0 — an empty protocol_name_list.
             #expect(throws: RFC_7301.Extension.Error.noProtocols) {
-                try RFC_7301.Extension(binary: [0, 0] as [Byte])
+                try RFC_7301.Extension(binary: [Byte(0), Byte(0)] as [Byte])
             }
         }
 
@@ -202,13 +202,13 @@ struct RFC7301Tests {
         func `Reject zero-length protocol name`() {
             // List of one entry whose ProtocolName length is 0.
             #expect(throws: RFC_7301.Extension.Error.name(.empty)) {
-                try RFC_7301.Extension(binary: [0, 1, 0] as [Byte])
+                try RFC_7301.Extension(binary: [Byte(0), Byte(1), Byte(0)] as [Byte])
             }
         }
 
         @Test
         func `Reject truncated input`() {
-            let full: [Byte] = [0, 3, 2, 0x68, 0x32]
+            let full: [Byte] = [Byte(0), Byte(3), Byte(2), Byte(0x68), Byte(0x32)]
             for cut in 0..<full.count {
                 #expect(throws: RFC_7301.Extension.Error.truncated) {
                     try RFC_7301.Extension(binary: Array(full.prefix(cut)))
@@ -220,7 +220,7 @@ struct RFC7301Tests {
         func `Reject trailing data`() {
             // Complete list followed by one stray byte.
             #expect(throws: RFC_7301.Extension.Error.trailingData(1)) {
-                try RFC_7301.Extension(binary: [0, 3, 2, 0x68, 0x32, 0xFF] as [Byte])
+                try RFC_7301.Extension(binary: [Byte(0), Byte(3), Byte(2), Byte(0x68), Byte(0x32), Byte(0xFF)] as [Byte])
             }
         }
     }

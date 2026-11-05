@@ -15,7 +15,7 @@
 //
 // TLS presentation language: append helpers
 
-internal import Binary_Serializable_Primitives
+internal import Binary
 
 extension RFC_7301.Wire {
     /// Appends a `uint16`-length-prefixed opaque vector.

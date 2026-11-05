@@ -15,15 +15,15 @@
 // Stdlib-interop UInt8 forwarder for ALPN protocol identifier construction.
 // Primary byte-domain API lives in `RFC 7301`; this forwarder bridges stdlib
 // callers carrying `[UInt8]` (e.g. from network buffers, file reads) via
-// `[Byte](uint8s)`. Per [API-BYTE-007] (byte-discipline skill).
+// bit pattern. Per [API-BYTE-007] (byte-discipline skill).
 
-internal import Byte_Primitives
+internal import Byte
 public import RFC_7301
 
 extension RFC_7301.ProtocolIdentifier {
     /// Stdlib-interop forwarder: construction from `[UInt8]` rawValue.
     @_disfavoredOverload
     public init(rawValue: [UInt8]) throws(Error) {
-        try self.init(rawValue: [Byte](rawValue))
+        try self.init(rawValue: rawValue.map(Byte.init(bitPattern:)))
     }
 }

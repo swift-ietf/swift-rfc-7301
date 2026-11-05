@@ -15,7 +15,7 @@
 //
 // TLS presentation language: forward cursor
 
-internal import Binary_Serializable_Primitives
+internal import Binary
 
 extension RFC_7301.Wire {
     /// A forward cursor over a byte buffer that decodes the TLS
@@ -26,7 +26,7 @@ extension RFC_7301.Wire {
     /// ``RFC_7301/Wire/Error`` on exhaustion or overflow.
     struct Reader {
         /// The backing byte buffer (arithmetic-domain reads bridge via
-        /// `Byte.underlying`).
+        /// `Byte.bitPattern`).
         private let bytes: [Byte]
 
         /// The current read offset.
@@ -48,7 +48,7 @@ extension RFC_7301.Wire {
         mutating func byte() throws(RFC_7301.Wire.Error) -> UInt8 {
             guard index < bytes.count else { throw .truncated }
             defer { index += 1 }
-            return bytes[index].underlying
+            return bytes[index].bitPattern
         }
 
         /// Reads a big-endian `uint16`.

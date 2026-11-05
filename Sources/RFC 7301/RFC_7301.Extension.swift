@@ -15,7 +15,7 @@
 //
 // RFC 7301 Section 3.1: The Application-Layer Protocol Negotiation Extension
 
-public import Binary_Serializable_Primitives
+public import Binary
 public import RFC_8446
 
 extension RFC_7301 {
@@ -50,7 +50,7 @@ extension RFC_7301 {
     ///
     /// ```swift
     /// let alpn = try RFC_7301.Extension(protocols: [.h2, .http1_1])
-    /// let ext = alpn.extensionData     // type == .alpn
+    /// let ext = try alpn.extensionData     // type == .alpn
     /// ```
     public struct Extension: Sendable, Hashable {
         /// List of supported protocols (in preference order)
@@ -96,8 +96,13 @@ extension RFC_7301.Extension {
     public static let extensionType: RFC_8446.Extension.ExtensionType = .alpn
 
     /// Wraps this payload in a generic ``RFC_8446/Extension/Data`` envelope.
+    ///
+    /// - Throws: ``RFC_8446/Extension/Data/Error`` if the body exceeds the
+    ///   envelope's 65535-byte limit.
     public var extensionData: RFC_8446.Extension.Data {
-        RFC_8446.Extension.Data(type: Self.extensionType, data: self.bytes)
+        get throws(RFC_8446.Extension.Data.Error) {
+            try RFC_8446.Extension.Data(type: Self.extensionType, data: self.bytes)
+        }
     }
 }
 
@@ -163,7 +168,7 @@ extension RFC_7301.Extension: Binary.Serializable {
     ///
     /// - Parameter bytes: Exactly one `ProtocolNameList`; trailing bytes are
     ///   rejected.
-    public init<Bytes: Collection>(binary bytes: Bytes) throws(Error)
+    public init<Bytes: Swift::Collection>(binary bytes: Bytes) throws(Error)
     where Bytes.Element == Byte {
         let entries: [[Byte]]
         do throws(RFC_7301.Wire.Error) {
