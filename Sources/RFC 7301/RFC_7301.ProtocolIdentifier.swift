@@ -15,7 +15,7 @@
 //
 // RFC 7301 Section 3.1: The Application-Layer Protocol Negotiation Extension
 
-public import ASCII
+import ASCII
 public import Binary
 public import Byte
 
