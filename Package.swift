@@ -44,14 +44,14 @@ let package = Package(
             name: "RFC 7301 Tests",
             dependencies: [
                 .product(name: "Binary", package: "swift-binary"),
-                "RFC 7301",
+                .target(name: "RFC 7301"),
             ]
         ),
         .testTarget(
             name: "RFC 7301 Standard Library Integration Tests",
             dependencies: [
-                "RFC 7301",
-                "RFC 7301 Standard Library Integration",
+                .target(name: "RFC 7301"),
+                .target(name: "RFC 7301 Standard Library Integration"),
             ]
         ),
     ],
