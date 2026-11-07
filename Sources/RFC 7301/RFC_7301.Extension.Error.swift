@@ -1,5 +1,5 @@
-public import Binary
-public import RFC_8446
+import Binary
+import RFC_8446
 
 
 extension RFC_7301.Extension {
