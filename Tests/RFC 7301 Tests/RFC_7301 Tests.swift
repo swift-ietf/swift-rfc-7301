@@ -16,9 +16,15 @@ import RFC_8446
 
 @testable import RFC_7301
 
-@Suite
-struct `RFC 7301 ALPN Tests` {
+enum `RFC_7301 Tests` {}
 
+extension `RFC_7301 Tests` {
+    @Suite
+    struct `RFC 7301 ALPN Tests` {
+    }
+}
+
+extension `RFC_7301 Tests`.`RFC 7301 ALPN Tests` {
     @Suite
     struct `Constants Tests` {
         @Test
