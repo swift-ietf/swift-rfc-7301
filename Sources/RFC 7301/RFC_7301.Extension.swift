@@ -1,20 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp
-// Licensed under Apache License v2.0
-//
-// See LICENSE.txt for license information
-// See CONTRIBUTORS.txt for the list of project contributors
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-// ===----------------------------------------------------------------------===//
-
-// RFC_7301.Extension.swift
-// swift-rfc-7301
-//
-// RFC 7301 Section 3.1: The Application-Layer Protocol Negotiation Extension
-
 public import Binary
 public import RFC_8446
 
@@ -81,8 +64,6 @@ extension RFC_7301 {
     }
 }
 
-// MARK: - Accessors
-
 extension RFC_7301.Extension {
     /// The selected protocol (first in list)
     ///
@@ -105,8 +86,6 @@ extension RFC_7301.Extension {
         }
     }
 }
-
-// MARK: - Error
 
 extension RFC_7301.Extension {
     /// Errors that can occur when creating or parsing ALPN extensions
@@ -140,8 +119,6 @@ extension RFC_7301.Extension.Error: CustomStringConvertible {
     }
 }
 
-// MARK: - Binary.Serializable
-
 extension RFC_7301.Extension: Binary.Serializable {
     /// Serializes the ALPN `extension_data` body.
     ///
@@ -155,8 +132,6 @@ extension RFC_7301.Extension: Binary.Serializable {
         _ ext: Self,
         into buffer: inout Buffer
     ) where Buffer.Element == Byte {
-        // Serialize protocol list to a typed [Byte] intermediate so the
-        // length can be measured.
         var protocolNameList: [Byte] = []
         for proto in ext.protocols {
             RFC_7301.ProtocolIdentifier.serialize(proto, into: &protocolNameList)
@@ -201,28 +176,23 @@ extension RFC_7301.Extension: Binary.Serializable {
     }
 }
 
-// MARK: - Convenience Initializers
-
 extension RFC_7301.Extension {
     /// Creates an ALPN extension for HTTP/2 with HTTP/1.1 fallback
     ///
     /// This is the most common configuration for HTTPS.
     public static var http2: Self {
-        // Cannot throw because we're using well-known protocols
         // swiftlint:disable:next force_try
         try! Self(protocols: [.h2, .http1_1])
     }
 
     /// Creates an ALPN extension for HTTP/3
     public static var http3: Self {
-        // Cannot throw because we're using well-known protocols
         // swiftlint:disable:next force_try
         try! Self(protocols: [.h3])
     }
 
     /// Creates an ALPN extension for HTTP/1.1 only
     public static var http1_1: Self {
-        // Cannot throw because we're using well-known protocols
         // swiftlint:disable:next force_try
         try! Self(protocols: [.http1_1])
     }

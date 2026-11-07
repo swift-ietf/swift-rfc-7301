@@ -1,23 +1,4 @@
-// ===----------------------------------------------------------------------===//
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp
-// Licensed under Apache License v2.0
-//
-// See LICENSE.txt for license information
-// See CONTRIBUTORS.txt for the list of project contributors
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-// ===----------------------------------------------------------------------===//
-
-// RFC_7301.ProtocolIdentifier.WellKnown.swift
-// swift-rfc-7301
-//
-// Well-known ALPN protocol identifiers
-
 import Byte
-
-// MARK: - HTTP Protocols
 
 extension RFC_7301.ProtocolIdentifier {
     /// HTTP/1.0 ("http/1.0")
@@ -39,8 +20,6 @@ extension RFC_7301.ProtocolIdentifier {
     public static let spdy3_1 = Self(__unchecked: (), rawValue: [Byte](utf8: "spdy/3.1"))
 }
 
-// MARK: - Email Protocols
-
 extension RFC_7301.ProtocolIdentifier {
     /// IMAP ("imap")
     public static let imap = Self(__unchecked: (), rawValue: [Byte](utf8: "imap"))
@@ -48,8 +27,6 @@ extension RFC_7301.ProtocolIdentifier {
     /// POP3 ("pop3")
     public static let pop3 = Self(__unchecked: (), rawValue: [Byte](utf8: "pop3"))
 }
-
-// MARK: - Other Protocols
 
 extension RFC_7301.ProtocolIdentifier {
     /// FTP ("ftp")

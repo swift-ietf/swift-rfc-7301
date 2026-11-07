@@ -1,25 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp
-// Licensed under Apache License v2.0
-//
-// See LICENSE.txt for license information
-// See CONTRIBUTORS.txt for the list of project contributors
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-// ===----------------------------------------------------------------------===//
-
-// RFC_7301.swift
-// swift-rfc-7301
-//
-// RFC 7301: Transport Layer Security (TLS) Application-Layer Protocol
-//           Negotiation Extension (July 2014)
-// https://www.rfc-editor.org/rfc/rfc7301.html
-//
-// This package implements ALPN as defined by RFC 7301.
-// ALPN allows negotiation of the application protocol during the TLS handshake.
-
 /// RFC 7301: TLS Application-Layer Protocol Negotiation Extension
 ///
 /// This namespace contains types for ALPN as defined in RFC 7301 from July 2014.

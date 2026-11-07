@@ -1,20 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp
-// Licensed under Apache License v2.0
-//
-// See LICENSE.txt for license information
-// See CONTRIBUTORS.txt for the list of project contributors
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-// ===----------------------------------------------------------------------===//
-
-// RFC_7301.ProtocolIdentifier.swift
-// swift-rfc-7301
-//
-// RFC 7301 Section 3.1: The Application-Layer Protocol Negotiation Extension
-
 import ASCII
 public import Binary
 public import Byte
@@ -61,9 +44,6 @@ extension RFC_7301 {
             self.init(__unchecked: (), rawValue: rawValue)
         }
 
-        // Stdlib-interop forwarder `init(rawValue: [UInt8])` moved to
-        // `RFC 7301 Standard Library Integration` target per [API-BYTE-007].
-
         /// Creates a protocol identifier from a string
         ///
         /// - Parameter string: The protocol identifier string
@@ -74,8 +54,6 @@ extension RFC_7301 {
     }
 }
 
-// MARK: - Binary.Serializable
-
 extension RFC_7301.ProtocolIdentifier: Binary.Serializable {
     /// Serializes the protocol identifier
     ///
@@ -84,21 +62,16 @@ extension RFC_7301.ProtocolIdentifier: Binary.Serializable {
         _ proto: Self,
         into buffer: inout Buffer
     ) where Buffer.Element == Byte {
-        // Length is opaque-byte length count (≤255 enforced at init).
         buffer.append(Byte(UInt8(proto.rawValue.count)))
         buffer.append(contentsOf: proto.rawValue)
     }
 }
-
-// MARK: - CustomStringConvertible
 
 extension RFC_7301.ProtocolIdentifier: CustomStringConvertible {
     public var description: String {
         String(decoding: rawValue, as: UTF8.self)
     }
 }
-
-// MARK: - Codable
 
 extension RFC_7301.ProtocolIdentifier: Codable {
     public init(from decoder: any Decoder) throws {
