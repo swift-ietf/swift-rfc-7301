@@ -16,19 +16,19 @@ import RFC_8446
 
 @testable import RFC_7301
 
-@Suite("RFC 7301 ALPN Tests")
-struct RFC7301Tests {
+@Suite
+struct `RFC 7301 ALPN Tests` {
 
-    @Suite("Constants Tests")
-    struct ConstantsTests {
+    @Suite
+    struct `Constants Tests` {
         @Test
         func `Extension type is 16`() {
             #expect(RFC_7301.extensionType == 16)
         }
     }
 
-    @Suite("Protocol Identifier Tests")
-    struct ProtocolIdentifierTests {
+    @Suite
+    struct `Protocol Identifier Tests` {
         @Test
         func `Well-known protocols`() {
             #expect(RFC_7301.ProtocolIdentifier.http1_1.description == "http/1.1")
@@ -74,8 +74,8 @@ struct RFC7301Tests {
         }
     }
 
-    @Suite("Extension Tests")
-    struct ExtensionTests {
+    @Suite
+    struct `Extension Tests` {
         @Test
         func `Create extension with protocols`() throws {
             let ext = try RFC_7301.Extension(protocols: [.h2, .http1_1])
@@ -159,8 +159,8 @@ struct RFC7301Tests {
         }
     }
 
-    @Suite("Extension Parse Tests")
-    struct ExtensionParseTests {
+    @Suite
+    struct `Extension Parse Tests` {
         @Test
         func `Parse single-protocol body`() throws {
             let body: [Byte] = [Byte(0), Byte(3), Byte(2), Byte(0x68), Byte(0x32)]  // list len 3; "h2"
@@ -225,8 +225,8 @@ struct RFC7301Tests {
         }
     }
 
-    @Suite("Additional Protocols Tests")
-    struct AdditionalProtocolsTests {
+    @Suite
+    struct `Additional Protocols Tests` {
         @Test
         func `Transport protocols`() {
             #expect(RFC_7301.ProtocolIdentifier.imap.description == "imap")

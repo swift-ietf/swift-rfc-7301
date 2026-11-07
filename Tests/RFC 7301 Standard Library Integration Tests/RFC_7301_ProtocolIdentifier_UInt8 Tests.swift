@@ -14,8 +14,8 @@ import RFC_7301
 import RFC_7301_Standard_Library_Integration
 import Testing
 
-@Suite("RFC 7301 ProtocolIdentifier UInt8 forwarder")
-struct RFC_7301_ProtocolIdentifier_UInt8_Tests {
+@Suite
+struct `RFC 7301 ProtocolIdentifier UInt8 forwarder` {
     @Test
     func `forwarder constructs identifier from [UInt8]`() throws {
         let uint8Bytes: [UInt8] = Array("h2".utf8)
