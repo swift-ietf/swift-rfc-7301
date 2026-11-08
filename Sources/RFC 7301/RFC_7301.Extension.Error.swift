@@ -1,7 +1,6 @@
 import Binary
 import RFC_8446
 
-
 extension RFC_7301.Extension {
     /// Errors that can occur when creating or parsing ALPN extensions
     public enum Error: Swift.Error, Sendable, Equatable {
