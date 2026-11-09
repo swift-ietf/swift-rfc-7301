@@ -10,9 +10,9 @@
 //
 // ===----------------------------------------------------------------------===//
 
-import Testing
 import Binary
 import RFC_8446
+import Testing
 
 @testable import RFC_7301
 
