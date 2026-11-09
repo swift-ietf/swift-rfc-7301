@@ -53,7 +53,7 @@ extension RFC_7301 {
             guard !protocols.isEmpty else {
                 throw Error.noProtocols
             }
-            let length = protocols.reduce(0) { $0 + 1 + $1.rawValue.count }
+            let length = protocols.reduce(0) { $0 + $1.encodedLength }
             guard length <= 65535 else {
                 throw Error.tooLong(length)
             }

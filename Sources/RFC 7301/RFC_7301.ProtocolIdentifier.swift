@@ -54,6 +54,14 @@ extension RFC_7301 {
     }
 }
 
+extension RFC_7301.ProtocolIdentifier {
+    /// The number of bytes this identifier occupies on the wire: the length
+    /// byte and the identifier bytes.
+    var encodedLength: Int {
+        1 + rawValue.count
+    }
+}
+
 extension RFC_7301.ProtocolIdentifier: Binary.Serializable {
     /// Serializes the protocol identifier
     ///
