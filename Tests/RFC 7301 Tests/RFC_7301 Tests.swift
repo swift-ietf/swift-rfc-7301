@@ -205,6 +205,24 @@ extension `RFC_7301 Tests`.`RFC 7301 ALPN Tests` {
         }
 
         @Test
+        func `Reject protocol list longer than 65535 bytes`() throws {
+            let name = try RFC_7301.ProtocolIdentifier(rawValue: Array(repeating: Byte(0x61), count: 255))
+            let protocols = Array(repeating: name, count: 257)
+            #expect(throws: RFC_7301.Extension.Error.tooLong(65792)) {
+                try RFC_7301.Extension(protocols: protocols)
+            }
+        }
+
+        @Test
+        func `Accept protocol list of exactly 65535 bytes`() throws {
+            let name = try RFC_7301.ProtocolIdentifier(rawValue: Array(repeating: Byte(0x61), count: 255))
+            let last = try RFC_7301.ProtocolIdentifier(rawValue: Array(repeating: Byte(0x62), count: 254))
+            let ext = try RFC_7301.Extension(protocols: Array(repeating: name, count: 255) + [last])
+            #expect(ext.bytes.count == 65537)
+            #expect(try RFC_7301.Extension(binary: ext.bytes) == ext)
+        }
+
+        @Test
         func `Reject zero-length protocol name`() {
             // List of one entry whose ProtocolName length is 0.
             #expect(throws: RFC_7301.Extension.Error.name(.empty)) {

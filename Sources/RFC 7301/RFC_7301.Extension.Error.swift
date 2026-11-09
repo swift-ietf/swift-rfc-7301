@@ -7,6 +7,9 @@ extension RFC_7301.Extension {
         /// Protocol list cannot be empty
         case noProtocols
 
+        /// The serialized `protocol_name_list` exceeds 65535 bytes
+        case tooLong(_ length: Int)
+
         /// A `ProtocolName` entry in the list failed validation
         case name(RFC_7301.ProtocolIdentifier.Error)
 

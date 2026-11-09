@@ -47,10 +47,15 @@ extension RFC_7301 {
         /// Creates an ALPN extension
         ///
         /// - Parameter protocols: List of protocols in preference order
-        /// - Throws: `Error.noProtocols` if list is empty
+        /// - Throws: `Error.noProtocols` if list is empty, `Error.tooLong` if
+        ///   the serialized list exceeds 65535 bytes
         public init(protocols: [ProtocolIdentifier]) throws(Error) {
             guard !protocols.isEmpty else {
                 throw Error.noProtocols
+            }
+            let length = protocols.reduce(0) { $0 + 1 + $1.rawValue.count }
+            guard length <= 65535 else {
+                throw Error.tooLong(length)
             }
             self.init(__unchecked: (), protocols: protocols)
         }
@@ -95,6 +100,8 @@ extension RFC_7301.Extension.Error: CustomStringConvertible {
         switch self {
         case .noProtocols:
             return "ALPN extension requires at least one protocol"
+        case .tooLong(let length):
+            return "ALPN protocol list too long: \(length) bytes (max 65535)"
         case .name(let error):
             return "ALPN protocol name invalid: \(error)"
         case .truncated:
